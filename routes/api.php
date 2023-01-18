@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Models\Picture;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,9 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Route::get('/pictures',function(){
+//     $picture = Picture::all();
+//     return response()->json($picture);
+// });
 
-Route::get('/photos','PhotoController@index');
-Route::post('/photos', 'PhotoController@store')->middleware('App\Http\Middleware\PhotoMiddleware');
+Route::get('/pictures','PictureController@index');
+Route::get('/pictures/{id}','PictureController@show')->middleware('App\Http\Middleware\React');
+Route::post('/pictures' , 'PictureController@store')->middleware('App\Http\Middleware\React');
+
+Route::post('/register','AuthenticationController@register');
+Route::post('/login','AuthenticationController@login');
 
 
 

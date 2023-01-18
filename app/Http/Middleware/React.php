@@ -4,8 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-
-class PhotoMiddleware
+use Illuminate\Support\Facades\Auth;
+use App\Models\user;
+class React
 {
     /**
      * Handle an incoming request.
@@ -16,9 +17,15 @@ class PhotoMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if(!$request->header('Unique-Key')){
-            return response()->json(['erreur'=>'Action impossible 😥']);
+        $token = $request->header('api-token');
+        if(!$token){
+            return response()->json(['message' => 'Missing token'],403);
         }
+        $user = User::where('api_token',$token)->first();
+        if(!$user){
+            return response()->json(['message' => 'Invalid Credentials'],403);
+        }
+        Auth::login($user);
         return $next($request);
     }
 }
